@@ -1,0 +1,10 @@
+import pandas as pd
+from google.auth.transport.requests import Request
+from google.oauth2.service_account import Credentials
+import vertexai
+from vertexai.language_models import TextEmbeddingModel
+import time
+from sklearn.metrics.pairwise import cosine_similarity
+import matplotlib.pyplot as plt
+from vertexai.language_models import TextGenerationModel
+import json

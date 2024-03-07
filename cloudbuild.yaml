@@ -1,0 +1,32 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us-central1-docker.pkg.dev/sb-prototipos-xops/repo-testlaura/ms-test:latest', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us-central1-docker.pkg.dev/sb-prototipos-xops/repo-testlaura/ms-test:latest']
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: [
+    'run', 'deploy', 'ms-test-cloudrun',
+    '--image', 'us-central1-docker.pkg.dev/sb-prototipos-xops/repo-testlaura/ms-test:latest',
+    '--region', 'us-central1',
+    '--platform', 'managed',
+    '--allow-unauthenticated'
+  ]
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  args:
+  - gcloud
+  - functions
+  - deploy
+  - cf-ms-test-cloudrun
+  - --region=us-central1
+  - --source=cloud-function
+  - --trigger-topic=test-event-1
+  - --runtime=python39
+  - --entry-point= main
+
+
+images:
+- 'us-central1-docker.pkg.dev/sb-prototipos-xops/repo-testlaura/ms-test:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
